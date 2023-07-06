@@ -10,6 +10,8 @@ function App() {
     description: "",
     price: 0,
   });
+  
+  
   const [itemList, setItemList] = useState<SupermarketItems>([]);
   const handleAddItem = () => {
     const id = (Math.random() * 1000).toString() + newItem.name;
@@ -17,15 +19,22 @@ function App() {
     setOpenModal(false);
     setNewItem({ id: "", name: "", description: "", price: 0 });
   };
+  
   const handleItemChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name: dynamicNameValue, value } = e.target;
     setNewItem({ ...newItem, [dynamicNameValue]: value });
+  };
+  
+  const handleItemRemove = (id: string) => {
+    setItemList(oldValues => {
+      return oldValues.filter(itemList => itemList.id !== id)
+    })
   };
 
   return (
     <main className="bg-[#bccdd7] w-screen h-screen relative flex justify-center items-center">
       {openModal ? (
-        <div className="bg-[#e0efee] rounded-lg p-3 justify-center content-center w-[20%] mx-auto h-[28%]">
+        <div className="bg-[#e0efee] rounded-lg p-3 justify-center content-center w-[20%] mx-auto h-[25%]">
           <div className="flex flex-col items-center">
             <h1 className="mb-5 text-[20px] font-semibold text-[#1c2020]">
               Add items
@@ -76,10 +85,15 @@ function App() {
             <h1 className="mb-5 text-[20px] font-semibold text-[#1c2020]">
               Supermarket List
             </h1>
-            <div className="text-[#1c2020]">{itemList.length} Items added</div>
-            <div className="mt-2 mb-2 text-[#1c2020]">
+            <div className="text-[#1c2020] text-[18x]">{itemList.length} Items added</div>
+            <div className="mt-2 mb-2 text-[#1c2020] ">
               {itemList.map((item) => (
-                <div>{item.description}</div>
+                <div className="flex gap-10 m-3">
+                  <button className="rounded-full bg-[#bb4168] w-5 h-5 flex items-center justify-center pb-1 text-[#dcf7f9]" onClick={() => handleItemRemove(item.id)}>
+                    x
+                  </button>
+                  <p>{item.description}</p>
+                </div>
               ))}
             </div>
             <button
